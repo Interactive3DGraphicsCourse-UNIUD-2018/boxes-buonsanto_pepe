@@ -1,0 +1,676 @@
+<html>
+	<head>
+		<title>Kong Island</title>
+		<style>
+		
+		body {
+			font-family: Monospace;
+			background-color: #f0f0f0;
+			margin: 0px;
+			overflow: hidden;
+		}
+		
+		canvas { 
+			width: 100%; 
+			height: 100%;
+		}
+	
+	</style>
+		<script src="lib/three.min.js"></script>
+		<script src="lib/stats.min.js"></script>
+		<script src="lib/Coordinates.js"></script>
+		<script src="lib/OrbitControls.js"></script>
+	</head>
+	<body>
+		
+		<script>
+		
+		var MOVE=true;
+		var alpha=false;
+		var count_move=false;
+		var BRA=false;
+		var UP=1;
+		var SIT=0;
+		var i=0;
+		var reload=0;
+		
+		
+			function Animation(){
+			upmonkey();
+			move();
+			sit();
+			abbassabraccia();
+			reset();
+		}
+		
+		function upmonkey(){setTimeout(up, 3600);}
+		
+		
+		function move(){
+		
+		if(count_move){
+		sound.play();
+		if(i==600)stopmove();
+			i++
+			reload=0
+				if(MOVE)
+				{			
+				
+				if (braccioDXPivot2.rotation.z <=2)braccioDXPivot2.rotation.z+=0.03;
+				if	(braccioDXPivot2.position.x <=0.5)braccioDXPivot2.position.x+=0.008;
+				if	(braccioDXPivot2.position.y <=-0.2)	braccioDXPivot2.position.y+=0.008;
+				
+				if 	(braccioSXPivot2.rotation.z <=-0.5)braccioSXPivot2.rotation.z+=0.03;
+				if	(braccioSXPivot2.position.x <=0)braccioSXPivot2.position.x+=0.008;
+				if	(braccioSXPivot2.position.y >=-0.6)	braccioSXPivot2.position.y+=-0.008;
+				
+				if	(braccioDXPivot2.rotation.z >=2) MOVE=false;
+				}
+				
+				if(!MOVE){
+				
+				if 	(braccioDXPivot2.rotation.z >=0.5)braccioDXPivot2.rotation.z+=-0.03;
+				if	(braccioDXPivot2.position.x >=0)braccioDXPivot2.position.x+=-0.008;
+				if	(braccioDXPivot2.position.y >=-0.6)	braccioDXPivot2.position.y+=-0.008;
+				
+				if (braccioSXPivot2.rotation.z >=-2)braccioSXPivot2.rotation.z+=-0.03;
+				if	(braccioSXPivot2.position.x >=-0.5)braccioSXPivot2.position.x+=-0.008;
+				if	(braccioSXPivot2.position.y <=-0.2)	braccioSXPivot2.position.y+=0.008;
+				
+				if	(braccioDXPivot2.rotation.z<=0.5)MOVE=true;
+				
+			}		
+		
+		}
+		
+		}
+		function stopmove(){count_move=false;BRA=true;}
+		
+		function reset(){	if((alpha)&&(reload==500)) {UP=1;		BRA=false;		SIT=2;	i=0;}	else reload++ }
+		
+		function up(){
+		
+		if(UP==1){
+		
+		alpha=false;
+
+		if(bustoPivot.rotation.x >=0) bustoPivot.rotation.x+=-0.015;
+		if(bustoPivot.position.z>=0 ) bustoPivot.position.z+=-0.015;
+		if(braccioSXPivot.rotation.x<=0)braccioSXPivot.rotation.x+=0.015;
+		if(braccioDXPivot.rotation.x<=0)braccioDXPivot.rotation.x+=0.015;
+		
+		braccioSXPivot.rotation.x+=-0.03;
+		braccioDXPivot.rotation.x+=-0.03;
+		if (braccioSXPivot.rotation.x <=-1.5){count_move=true;}	
+		if(bustoPivot.rotation.x <=0) {UP=0;}
+		}
+		}
+		
+		function sit()
+		{
+		
+		if(SIT==1){
+		if(bustoPivot.rotation.x <=1) bustoPivot.rotation.x+=0.015;
+		if(bustoPivot.position.z<=0.35 ) bustoPivot.position.z+=0.015;
+		
+		if(braccioSXPivot.rotation.x>=-1)braccioSXPivot.rotation.x+=-0.015;
+		if(braccioDXPivot.rotation.x>=-1)braccioDXPivot.rotation.x+=-0.015;
+		if(bustoPivot.rotation.x >=1){SIT=0;alpha=true;};
+		}
+		
+		}
+
+		function  abbassabraccia(){
+		if(BRA){
+		if (braccioDXPivot.rotation.x <=0)
+			{
+			sound.stop();
+				braccioSXPivot.rotation.x+=0.03;
+				braccioDXPivot.rotation.x+=0.03;
+				
+				if 	(braccioDXPivot2.rotation.z >=0.5)braccioDXPivot2.rotation.z+=-0.03;
+				if	(braccioDXPivot2.position.x >=0)braccioDXPivot2.position.x+=-0.008;
+				if	(braccioDXPivot2.position.y >=-0.6)	braccioDXPivot2.position.y+=-0.008;
+				
+				if 	(braccioSXPivot2.rotation.z <=-0.5)braccioSXPivot2.rotation.z+=0.03;
+				if	(braccioSXPivot2.position.x <=0)braccioSXPivot2.position.x+=0.008;
+				if	(braccioSXPivot2.position.y >=-0.6)	braccioSXPivot2.position.y+=-0.008;	
+			}else {SIT=1; BRA=false;}
+		
+			
+			}
+			
+		}
+
+		
+		function getHeightData(img,scale) {
+			if (scale == undefined) scale=1;
+			var canvas = document.createElement( 'canvas' );
+			canvas.width = img.width;
+			canvas.height = img.height;
+			var context = canvas.getContext( '2d' );
+ 			var size = img.width * img.height;
+			
+			var data = new Float32Array( size );
+			context.drawImage(img,0,0);
+			for(var i=0; i<size; i++) {
+				data[i] = 0
+			}
+			var imgd = context.getImageData(0, 0, img.width, img.height);
+			var pix = imgd.data;
+			var j=0;
+			for (var i = 0; i<pix.length; i +=4) {
+				var all = pix[i]+pix[i+1]+pix[i+2];  // all is in range 0 - 255*3
+				data[j++] = scale*all/3;   
+			}
+			return data;
+		}
+		
+		// TERRAIN elements
+		var world = new THREE.Object3D();
+		var geometry = new THREE.BoxGeometry(1,1,1);
+		var sabbia_texture = THREE.ImageUtils.loadTexture( 'textures/sabbia.jpg' );
+		var sabbia_material = new THREE.MeshPhongMaterial( { map: sabbia_texture } );
+		var water_texture = THREE.ImageUtils.loadTexture( 'textures/water.jpg' );
+		var water_material = new THREE.MeshPhongMaterial( {map: water_texture,opacity: 0.9, transparent: true } );
+		var prato = THREE.ImageUtils.loadTexture( 'textures/prato.jpg' );
+		var prato_material = new THREE.MeshPhongMaterial( {map: prato} );
+		var roccia = THREE.ImageUtils.loadTexture( 'textures/roccia.jpg' );
+		var roccia_material = new THREE.MeshPhongMaterial( {map: roccia} );
+		var palma = THREE.ImageUtils.loadTexture( 'textures/palma.jpg' );
+		var palma_material = new THREE.MeshPhongMaterial( {map: palma} );
+		var legno = THREE.ImageUtils.loadTexture( 'textures/legno.jpg' );
+		var legno_material = new THREE.MeshPhongMaterial( {map: legno} );
+		var moon = THREE.ImageUtils.loadTexture( 'textures/moon.jpg' );
+		var moon_material = new THREE.MeshPhongMaterial( {map: moon} );
+		var nuvole = THREE.ImageUtils.loadTexture( 'textures/nuvole.jpg' );
+		var nuvole_material = new THREE.MeshPhongMaterial( {map: nuvole,opacity: 0.8, transparent: true } );
+		var gorilla = THREE.ImageUtils.loadTexture( 'textures/gorillatex.jpg' );
+		var gorilla_material = new THREE.MeshPhongMaterial( {map: gorilla } );
+		var gorillapetto = THREE.ImageUtils.loadTexture( 'textures/pettogorilla.jpg' );
+		var gorillapetto_material = new THREE.MeshPhongMaterial( {map: gorillapetto } );
+		var gorillatex = THREE.ImageUtils.loadTexture( 'textures/gorilla.jpg' );
+		var gorillatex_material = new THREE.MeshPhongMaterial( {map: gorillatex } );
+		
+		
+		var scene = new THREE.Scene();
+		var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+		var renderer = new THREE.WebGLRenderer( {antialias: true} );
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		renderer.setClearColor( 0x0d254c );
+		renderer.setPixelRatio( window.devicePixelRatio );
+		renderer.gammaInput = true;
+		renderer.gammaOutput = true;
+		renderer.shadowMap.enabled = true;
+		document.body.appendChild( renderer.domElement );
+			
+		camera.position.set(-20,40,150);
+		camera.lookAt( new THREE.Vector3(0,0,0));
+		
+		
+		
+		
+		var	stats = new Stats();
+		stats.domElement.style.position = 'absolute';
+		stats.domElement.style.top = '0px';
+		document.body.appendChild( stats.domElement );
+			
+		
+		
+		// TERRAIN CREATION
+		world.position.set(-50,0,0);
+		scene.add( world );
+		var img = new Image();
+		img.onload = function () {
+  
+			//get height data from img
+			var data = getHeightData(img,0.15);
+				
+			//Creation
+			var k=0;
+			var terrain = [img.width];
+			for(i=0; i<img.width; i++) {
+				terrain[i] = [img.height];
+				for(j=0; j<img.height; j++) {
+				
+					if(data[k]<=3) {
+						terrain[i][j] = new THREE.Mesh( geometry, water_material );
+					}else if(data[k]>3&&data[k]<7) {
+						terrain[i][j] = new THREE.Mesh( geometry, sabbia_material );
+					
+					} 
+					else if(data[k]>8&&data[k]<20){
+						terrain[i][j] = new THREE.Mesh( geometry, prato_material );
+			          }
+					  else {
+						terrain[i][j] = new THREE.Mesh( geometry, roccia_material );
+			          }
+					terrain[i][j].position.set(i,data[k]/4,j); //sets the height of vertices
+					terrain[i][j].scale.y = data[k]/2;		   //scales the height of the cubes of the terrain
+					k++;
+					world.add( terrain[i][j] );
+				}
+			}
+		}
+		
+		// load img source
+		img.src = "textures/heightmap3.png";
+			
+//-------------------------------------------------------------------------------------------Gorilla
+				//Busto
+				var geometrybusto = new THREE.BoxGeometry(0.5,0.7,0.3);
+				cube_busto = new THREE.Mesh( geometrybusto, gorillatex_material );
+				
+				//petto
+				
+				var geometrypettoDX = new THREE.BoxGeometry(0.5,0.5,0.5);
+				cube_pettoDX = new THREE.Mesh( geometrypettoDX, gorillapetto_material );
+				var geometrypettoSX = new THREE.BoxGeometry(0.5,0.5,0.5);
+				cube_pettoSX = new THREE.Mesh( geometrypettoSX, gorillapetto_material );
+				cube_pettoDX.position.set(0.2,0.5,0.1);
+				cube_pettoSX.position.set(-0.2,0.5,0.1);
+				
+				//Testa
+				var geometrybustoTesta = new THREE.BoxGeometry(0.4,0.4,0.4);
+				cube_testa = new THREE.Mesh( geometrybustoTesta, gorillatex_material );
+				testaPivot = new THREE.Object3D();
+				testaPivot.position.set(0,0.9,0.2);
+				
+				//Muso
+				var geometrymuso = new THREE.BoxGeometry(0.2,0.2,0.2);
+				cube_muso = new THREE.Mesh( geometrymuso, gorilla_material );
+				
+				//gambe
+				var geometrygambaDX = new THREE.BoxGeometry(0.2,0.9,0.2);
+				cube_gambaDX = new THREE.Mesh( geometrygambaDX, gorilla_material );
+				var geometrygambaSX = new THREE.BoxGeometry(0.2,0.9,0.2);
+				cube_gambaSX = new THREE.Mesh( geometrygambaSX, gorilla_material );
+				
+				GambaDXPivot = new THREE.Object3D();
+				GambaSXPivot = new THREE.Object3D();
+				
+				GambaDXPivot.position.set(0.2,-0.6,0);
+				GambaSXPivot.position.set(-0.2,-0.6,0);
+				
+				
+				//piede
+				var geometrypiedeDX = new THREE.BoxGeometry(0.2,0.1,0.4);
+				cube_piedeDX = new THREE.Mesh( geometrypiedeDX, gorillatex_material );
+				var geometrypiedeSX = new THREE.BoxGeometry(0.2,0.1,0.4);
+				cube_piedeSX = new THREE.Mesh( geometrypiedeSX, gorillatex_material );
+				cube_piedeSX.position.y=-0.5;
+				cube_piedeDX.position.y=-0.5;
+				
+				//BracciaSX
+				braccioSXPivot = new THREE.Object3D();
+				var geometrybraccioSX = new THREE.BoxGeometry(0.3,0.5,0.3);
+				
+				cube_braccioSX = new THREE.Mesh( geometrybraccioSX, gorilla_material );
+				braccioSXPivot.position.set(0.7,0.5,0.2);
+				braccioSXPivot.rotation.z=0.5;				
+				
+				//BracciaDX
+				braccioDXPivot = new THREE.Object3D();
+				var geometrybraccioDX = new THREE.BoxGeometry(0.3,0.5,0.3);
+				
+				cube_braccioDX = new THREE.Mesh( geometrybraccioDX, gorilla_material );
+				braccioDXPivot.position.set(-0.7,0.5,0.2);
+				braccioDXPivot.rotation.z=-0.5;
+			
+				//AvanBracciaSX
+				braccioSXPivot2 = new THREE.Object3D();
+				var geometrybraccioSX2 = new THREE.BoxGeometry(0.3,0.8,0.3);
+				
+				cube_braccioSX2 = new THREE.Mesh( geometrybraccioSX2, gorilla_material );
+				braccioSXPivot2.position.set(0,-0.6,0);
+				braccioSXPivot2.rotation.z=-0.5;
+				
+				//AvanBracciaDX
+				braccioDXPivot2 = new THREE.Object3D();
+				var geometrybraccioDX2 = new THREE.BoxGeometry(0.3,0.8,0.3);
+				
+				cube_braccioDX2 = new THREE.Mesh( geometrybraccioDX2, gorilla_material );
+				braccioDXPivot2.position.set(0,-0.6,0);
+				braccioDXPivot2.rotation.z=0.5;
+				
+				//ManoSX
+				ManoSXPivot = new THREE.Object3D();
+				var geometryManoSX = new THREE.BoxGeometry(0.4,0.4,0.4);
+				cube_ManoSX = new THREE.Mesh( geometryManoSX, gorillatex_material );
+				ManoSXPivot.position.set(0,-0.4,0);
+				
+				//ManoDX
+				ManoDXPivot = new THREE.Object3D();
+				var geometryManoDX = new THREE.BoxGeometry(0.4,0.4,0.4);
+				cube_ManoDX = new THREE.Mesh( geometryManoDX, gorillatex_material );
+				ManoDXPivot.position.set(0,-0.4,0);
+					
+				//occhi
+				var eye_geometry = new THREE.BoxGeometry(0.1,0.1,0.05);
+				var eye_material = new THREE.MeshBasicMaterial( {color: 0xffffff} );
+				var eyesx = new THREE.Mesh( eye_geometry, eye_material );
+				var eyedx = new THREE.Mesh( eye_geometry, eye_material );
+				var pupil_geometry = new THREE.BoxGeometry(0.05,0.05,0.05);
+				var pupil_material = new THREE.MeshBasicMaterial( {color: 0x000000} );
+				var pupilsx = new THREE.Mesh( pupil_geometry, pupil_material );
+				var pupildx = new THREE.Mesh( pupil_geometry, pupil_material );
+				
+				monkey = new THREE.Object3D();
+				bustoPivot = new THREE.Object3D();
+				
+				
+				world.add(monkey);
+				monkey.position.set(29,19,21);
+				monkey.scale.set(2,2,2);
+				monkey.add(bustoPivot);
+				bustoPivot.add( cube_busto );
+				bustoPivot.add( cube_pettoDX );
+				bustoPivot.add( cube_pettoSX );
+				
+				
+				//occhi
+				bustoPivot.add(	testaPivot);
+				testaPivot.add(cube_testa);
+				cube_testa.add(cube_muso);
+				cube_muso.position.set(0,-0.1,0.2);
+				
+				
+				cube_testa.add( eyesx );
+				eyesx.position.set(0.1,0.1,0.2);
+				cube_testa.add( eyedx );
+				eyedx.position.set(-0.1,0.1,0.2);
+				eyesx.add(pupilsx);
+				pupilsx.position.set(0,0,0.02);
+				eyedx.add(pupildx);
+				pupildx.position.set(0,0,0.02);
+				
+				
+				monkey.add(GambaDXPivot);
+				GambaDXPivot.add(cube_gambaDX);
+				monkey.add(GambaSXPivot);
+				GambaSXPivot.add(cube_gambaSX);
+							
+				
+				cube_gambaSX.add(cube_piedeSX);
+				cube_gambaDX.add(cube_piedeDX);
+				
+				
+				//add avabraccia
+				bustoPivot.add(braccioSXPivot);
+				braccioSXPivot.add(cube_braccioSX);
+				bustoPivot.add(braccioDXPivot);
+				braccioDXPivot.add(cube_braccioDX);
+				
+				//add braccio
+				braccioSXPivot.add(braccioSXPivot2);
+				braccioSXPivot2.add(cube_braccioSX2);
+				braccioDXPivot.add(braccioDXPivot2);
+				braccioDXPivot2.add(cube_braccioDX2);
+			
+				
+				//add mani
+				cube_braccioDX2.add(ManoDXPivot);
+				ManoDXPivot.add(cube_ManoDX);
+				cube_braccioSX2.add(ManoSXPivot);
+				ManoSXPivot.add(cube_ManoSX);
+			
+				//Gorilla seduto
+				bustoPivot.rotation.x=1;
+				bustoPivot.position.z=0.35;
+				braccioSXPivot.rotation.x+=-1;
+				braccioDXPivot.rotation.x+=-1;
+			
+			
+//-------------------------------------------------------------------------------------------Gorilla
+
+
+
+	//torcia + luce
+		var geometry_palo=	 new THREE.BoxGeometry(0.2, 1.8 ,0.2);
+		var material_palo = new THREE.MeshBasicMaterial( {color:0xE26200} );
+	
+		var cube_palo = new THREE.Mesh(geometry_palo, legno_material);
+		var cube_palo1 = cube_palo.clone();
+		var cube_palo2 =cube_palo.clone();
+		var cube_palo3 = cube_palo.clone();
+		world.add(cube_palo);
+		world.add(cube_palo1);
+		world.add(cube_palo2);
+		world.add(cube_palo3);
+		cube_palo.position.set(26,10.5 ,32);
+		cube_palo1.position.set(33,10.5 ,38);
+		cube_palo2.position.set(26,10.5 ,38);
+		cube_palo3.position.set(33,10.5 ,32);
+		
+		var light = new THREE.PointLight( 0xff0000, 0.3, 30 );
+		cube_palo.add( light );
+		var light1 = new THREE.PointLight( 0xff0000, 0.3, 30 );
+		cube_palo1.add( light1 );
+		var light2 = new THREE.PointLight( 0xff0000, 0.3, 30 );
+		cube_palo2.add( light2 );
+		var light3 = new THREE.PointLight( 0xff0000, 0.3, 30 );
+		cube_palo3.add( light3 );
+		
+		
+	//pavimento	
+		var floor=	 new THREE.BoxGeometry(6, 0.2 ,12);
+		var cube_floor = new THREE.Mesh(floor, roccia_material);
+		cube_floor.position.set(29.5, 9.5,34);
+		world.add(cube_floor);
+		
+	//nuvole	
+		var nuvole=	 new THREE.BoxGeometry(40, 10 ,40);
+		var cube_nuvole = new THREE.Mesh(nuvole, nuvole_material);
+		cube_nuvole.position.set(0, 60,0);		
+		scene.add(cube_nuvole);
+		
+	//luna 
+		var geometry_moon = new THREE.BoxGeometry(10, 10 ,10);
+		var cube_moon = new THREE.Mesh(geometry_moon, moon_material);
+		cube_moon.position.set(-60, 100, -60);		
+		scene.add(cube_moon);
+		
+		
+	//luce hemisphere (luce alta sfondo, colore pavimento, intensità)
+		hemiLight = new THREE.HemisphereLight( 0x0d254c, 0xffffff, 0.6 );
+
+		hemiLight.position.set( 0, 100, 0 );
+		scene.add( hemiLight );
+
+		
+		
+			dirLight = new THREE.DirectionalLight( 0xffffff, 0.3 );
+			dirLight.color.setHSL( 0.1, 1, 0.95 );
+			dirLight.position.set(-60, 100, -60);		
+			
+			scene.add( dirLight );
+			dirLight.castShadow = true;
+			dirLight.shadow.mapSize.width = 1024;
+			dirLight.shadow.mapSize.height = 1024;
+		
+		
+	//alberi
+		var tree_geometry = new THREE.BoxGeometry(0.5,7,0.5);
+		var tree = new THREE.Mesh( tree_geometry, legno_material );
+		tree.position.set(10,5 , 53);
+		world.add( tree );
+			
+		var tree2 = new THREE.Mesh( tree_geometry, legno_material );
+		tree2.position.set(50,5 , 53);
+		world.add( tree2 );
+			
+		
+		var center = new THREE.Object3D();
+		center.position.set(0,3.5,0);
+		var center2 = new THREE.Object3D();
+		center2.position.set(0,3.5,0);
+		tree.add( center );
+		tree2.add( center2 );
+			
+		var palma = new THREE.BoxGeometry(1.5,4,0.1);
+		
+		for(var i=0; i<=360; i+=30) {
+			var foglia1 = new THREE.Mesh(palma, palma_material );
+			foglia1.rotateX(i*Math.PI/180);
+			foglia1.rotateZ(i*Math.PI/180);
+			var foglia2 = new THREE.Mesh(palma, palma_material );
+			foglia2.rotateX(i*Math.PI/180);
+			foglia2.rotateZ(i*Math.PI/180);
+			center.add( foglia1 );
+			center2.add(foglia2);
+		}
+	
+	
+		// { --------------------------------------------------------- Cascata
+		var water_num = 30;				//num cubi genrati
+
+		Cascatapivot = new THREE.Object3D();
+        world.add(Cascatapivot);
+		
+        Cascatapivot.position.set(35,-2,0);
+		Cascatapivot.rotation.y=-90*Math.PI/180;
+		
+		var geometryCascata = new THREE.BoxGeometry(1,1,1);
+		var cube_Cascata = new THREE.Mesh( geometryCascata, roccia_material );
+		Cascatapivot.add(cube_Cascata);
+		cube_Cascata.position.set(24.2,18,6);
+		var geometryBuco = new THREE.BoxGeometry(0.8,0.8,0.8);
+		var cube_Buco = new THREE.Mesh( geometryBuco, roccia_material );
+		Cascatapivot.add(cube_Buco);
+		cube_Buco.position.set(24.5,18,6);
+		
+        var waterGeometry = new THREE.BoxGeometry(0.5,0.5,0.5);
+		var waterMaterial = new THREE.MeshBasicMaterial({ color: 0x3030ff, opacity: 0.5, transparent: true });
+        var water_x_min = 25;
+        var water_y_max = 18;
+        var water_x_veloc = 1;				// x velocity
+         
+       				
+        var water_t_max = Math.sqrt(water_y_max/4);	// max time
+		
+        water = new Array();
+		
+        t = new Array();
+		
+        for (var i = 0; i < water_num; i++) {
+            water[i] = new THREE.Mesh(waterGeometry, waterMaterial);
+			 Cascatapivot.add(water[i]);
+		     t[i] = i*2;
+		}
+        //  --------------------------------------------------------- Cascata
+		
+		//----------------------------------------------------fire
+		
+		var fire_num = 10;				//num cubi genr
+		
+        var fireGeometry = new THREE.BoxGeometry(0.4,0.4,0.4);
+		var fireMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, opacity: 0.5, transparent: true });
+        				// x velocity
+         
+       				
+        var fire_t_max = Math.sqrt(water_y_max/4);	// max time
+		
+        fire = new Array();
+		fire1= new Array();
+		fire2= new Array();
+		fire3=new Array();
+        c = new Array();
+		
+        for (var i = 0; i <fire_num; i++) {
+            fire[i] = new THREE.Mesh(fireGeometry, fireMaterial);
+			fire1[i]= new THREE.Mesh(fireGeometry, fireMaterial);
+			fire2[i]= new THREE.Mesh(fireGeometry, fireMaterial);
+			fire3[i]= new THREE.Mesh(fireGeometry, fireMaterial);
+			 cube_palo.add(fire[i]);
+			 cube_palo1.add(fire1[i]);
+			 cube_palo2.add(fire2[i]);
+			 cube_palo3.add(fire3[i]);
+		     c[i] = i*1.2;
+		}
+		
+		
+		
+		
+		//-----------------------------------------------------fire
+		
+		
+		
+		
+		//audioplayer
+		var listener = new THREE.AudioListener();
+		camera.add( listener );
+
+		// create the PositionalAudio object (passing in the listener)
+		var sound = new THREE.PositionalAudio( listener );
+
+		// load a sound and set it as the PositionalAudio object's buffer
+		var audioLoader = new THREE.AudioLoader();
+		audioLoader.load( 'sound/kingkong.ogg', function( buffer ) {
+			sound.setBuffer( buffer );
+			sound.setRefDistance( 20 );
+			
+		});
+	
+		
+		
+		// uncomment if you need to draw coordinate axes when building the scene
+		//Coordinates.drawAllAxes();
+		var	controls = new THREE.OrbitControls( camera );
+		controls.addEventListener( 'change', Render );
+		
+		
+		
+		function Update() {
+		
+			
+		
+			requestAnimationFrame( Update );
+			controls.update();  
+			stats.update();
+			Render();
+			
+			
+					
+		   // water
+			for (var i = 0; i < water_num; i++) {
+				t[i] += 1;
+				
+				if (t[i] > water_t_max) { 
+                	t[i] = t[i] - Math.floor(t[i]/water_t_max)*water_t_max;
+					
+                }
+				 water[i].position.x = water_x_min + t[i]*water_x_veloc;
+                 water[i].position.y = water_y_max - t[i]*t[i]*4;
+                 water[i].position.z = 6 
+				}
+		//fire
+		
+		for (var i = 0; i < fire_num; i++) {
+				c[i] += 1;
+				
+				if (c[i] > fire_t_max) { 
+                	c[i] = c[i] - Math.floor(c[i]/fire_t_max)*fire_t_max;
+					
+                }
+				 
+                 fire[i].position.y = 0.5*c[i]+1
+				 fire1[i].position.y = fire[i].position.y;
+				 fire2[i].position.y = fire[i].position.y;
+                 fire3[i].position.y =  fire[i].position.y;
+				}
+
+}
+
+
+		function Render() {
+		
+			Animation();
+						
+			renderer.render(scene, camera);
+		}
+		
+		Update();
+			
+		</script>
+	</body>
+</html>
